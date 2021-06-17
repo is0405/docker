@@ -5,9 +5,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/is0405/recipes/model"
-	"github.com/is0405/recipes/repository"
-	"github.com/is0405/recipes/service"
+	"github.com/is0405/docker/model"
+	"github.com/is0405/docker/repository"
+	"github.com/is0405/docker/service"
 	"github.com/jmoiron/sqlx"
 )
 

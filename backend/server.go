@@ -11,8 +11,8 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/justinas/alice"
 
-	"github.com/is0405/recipes/controller"
-	"github.com/is0405/recipes/db"
+	"github.com/is0405/docker/controller"
+	"github.com/is0405/docker/db"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"github.com/rs/cors"

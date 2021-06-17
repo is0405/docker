@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	server "github.com/is0405/recipes"
+	server "github.com/is0405/docker"
 )
 
 func main() {

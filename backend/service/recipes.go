@@ -1,12 +1,12 @@
 package service
 
 import (
-	"github.com/is0405/recipes/dbutil"
+	"github.com/is0405/docker/dbutil"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 
-	"github.com/is0405/recipes/model"
-	"github.com/is0405/recipes/repository"
+	"github.com/is0405/docker/model"
+	"github.com/is0405/docker/repository"
 	//"fmt"
 )
 

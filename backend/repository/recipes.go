@@ -3,7 +3,7 @@ package repository
 import (
 	"database/sql"
 
-	"github.com/is0405/recipes/model"
+	"github.com/is0405/docker/model"
 	"github.com/jmoiron/sqlx"
 )
 
