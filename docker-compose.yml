@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  db:
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: recipes-db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    volumes:
+      - data-volume:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  migration:
+    image: flyway/flyway
+    depends_on:
+      - db
+    container_name: recipes-migration
+    volumes:
+      - ./database/migration/schema:/flyway/sql
+
+  api:
+    build:
+      context: ./backend
+    command: reflex -r '\.go$$' -s -- sh -c 'go run cmd/api/main.go -databaseDatasource="${DATABASE_DATASOURCE}" -port=1991'
+    container_name: recipes-api
+    ports:
+      - 1991:1991
+    environment:
+      - AWS_PROFILE=recipes
+    volumes:
+      - ./backend:/app
+      - ~/.aws:/root/.aws:ro
+    working_dir: /app
+
+volumes:
+  data-volume:
+  careler_node_modules-volume:
