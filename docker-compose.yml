@@ -22,10 +22,10 @@ services:
   api:
     build:
       context: ./backend
-    command: reflex -r '\.go$$' -s -- sh -c 'go run cmd/api/main.go -databaseDatasource="${DATABASE_DATASOURCE}" -port=1991'
+    command: reflex -r '\.go$$' -s -- sh -c 'go run cmd/api/main.go -databaseDatasource="${DATABASE_DATASOURCE}" -port=10001'
     container_name: recipes-api
     ports:
-      - 1991:1991
+      - 10001:10001
     environment:
       - AWS_PROFILE=recipes
     volumes:

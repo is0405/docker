@@ -11,8 +11,8 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/justinas/alice"
 
-	"github.com/recipes/controller"
-	"github.com/recipes/db"
+	"github.com/is0405/recipes/controller"
+	"github.com/is0405/recipes/db"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"github.com/rs/cors"
@@ -34,16 +34,6 @@ func (s *Server) Init(datasource string) error {
 		return fmt.Errorf("failed db init. %s", err)
 	}
 	s.db = dbcon
-
-	s.signer, err = cloudfront.InitSigner()
-	if err != nil {
-		return fmt.Errorf("failed cloudfront init. %s", err)
-	}
-
-	s.s3Session, err = s3.InitS3()
-	if err != nil {
-		return fmt.Errorf("failed s3 init. %s", err)
-	}
 
 	s.router = s.Route()
 	return nil
@@ -76,5 +66,7 @@ func (s *Server) Route() *mux.Router {
 
 
 	r := mux.NewRouter()
+	RecipesControlloer := controller.NewRecipes(s.db)
+	r.Methods(http.MethodPost).Path("/recipes").Handler(authChain.Then(AppHandler{RecipesControlloer.Create}))
 	return r
 }

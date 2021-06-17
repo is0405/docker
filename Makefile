@@ -68,4 +68,4 @@ PROD_FLYWAY_CMD = \
 
 $(PROD_FLYWAY_CMD):
 	@echo run $(@F) target in prod
-	@docker run -v $(CODEBUILD_SRC_DIR)/database/migration/schema:/flyway/sql -i --rm $(FLYWAY_DOCKER) $(FLYWAY_CONF) $(@F)
+	@docker run -v $(CODEBUILD_SRC_DIR)/database/schema:/flyway/sql -i --rm $(FLYWAY_DOCKER) $(FLYWAY_CONF) $(@F)
