@@ -5,7 +5,7 @@ FLYWAY_CONF?=-url=jdbc:mysql://$(DOCKER_DNS):3306/$(DBNAME) -user=root -password
 
 export DATABASE_DATASOURCE:=root:password@tcp($(DOCKER_DNS):3306)/$(DBNAME)
 aws.config:
-	mkdir -p ~/.aws && cp .aws.credentials.example ~/.aws/credentials && mkdir -p ~/.careler
+	mkdir -p ~/.aws && cp .aws.credentials.example ~/.aws/credentials && mkdir -p ~/.recipes
 
 docker-compose/build:
 	docker-compose build

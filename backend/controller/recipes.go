@@ -2,8 +2,10 @@ package controller
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
+	"strings"
+	"regexp"
+	"errors"
 
 	"github.com/is0405/docker/model"
 	"github.com/is0405/docker/repository"
@@ -21,7 +23,7 @@ func NewRecipes(db *sqlx.DB) *Recipes {
 
 type CreateResponseOKRecipes struct {
 	Message  string          `json:"message"`
-	Recipe   []model.Recipes `json:"recipe"`
+	Recipe   *model.Recipes `json:"recipe"`
 }
 
 type CreateResponseNGRecipes struct {
@@ -39,79 +41,88 @@ func (a *Recipes) Create(_ http.ResponseWriter, r *http.Request) (int, interface
 	}
 	
 	if err := json.NewDecoder(r.Body).Decode(&rawRecipe); err != nil {
-		return http.StatusBadRequest, res, nil
+		return http.StatusBadRequest, res, err
 	}
 
 	//Title
 	if rawRecipe.Title == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		return http.StatusUnprocessableEntity, res, errors.New("required parameter is missing:title")
 	}
 
 	if !StringCheck(rawRecipe.Title) {
-		return http.StatusBadRequest, res, nil
+		return http.StatusBadRequest, res, errors.New("invalid is missing:title")
 	}
 
 	//MakingTime
 	if rawRecipe.MakingTime == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		return http.StatusUnprocessableEntity, res, errors.New("required parameter is missing:MakingTime")
 	}
 
 	if !StringCheck(rawRecipe.MakingTime) || !MakingTimeCheck(rawRecipe.MakingTime)  {
-		return http.StatusBadRequest, res, nil
+		return http.StatusBadRequest, res, errors.New("invalid is missing:MakingTime")
 	}
 	
 	//Serves
 	if rawRecipe.Serves == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		return http.StatusUnprocessableEntity, res, errors.New("required parameter is missing:Serves")
 	}
 
-	if !StringCheck(rawRecipe.Serves) || !ServesCheck(rawRecipe.MakingTime){
-		return http.StatusBadRequest, res, nil
+	if !StringCheck(rawRecipe.Serves) || !ServesCheck(rawRecipe.Serves){
+		return http.StatusBadRequest, res, errors.New("invalid is missing:Serves")
 	}
 	
 	//Ingridients
 	if rawRecipe.Ingridients == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		return http.StatusUnprocessableEntity, res, errors.New("required parameter is missing:Ingridient")
 	}
 	
 	if !IngridientsCheck(rawRecipe.Ingridients) {
-		return http.StatusBadRequest, res, nil
+		return http.StatusBadRequest, res, errors.New("invalid is missing:Ingridient")
 	}
 
 	//Cost
 	if rawRecipe.Cost <= 0 {
-		return http.StatusUnprocessableEntity, res, nil
+		return http.StatusUnprocessableEntity, res, errors.New("required parameter is missing:Cost")
 	}
 
 	Service := service.NewRecipes(a.db)
-	id, err := roomService.Create(rawRecipe)
+	id, err := Service.Create(rawRecipe)
 	if err != nil {
-		return http.StatusInternalServerError, res, nil
+		return http.StatusInternalServerError, res, err
 	}
 
-	res = CreateResponseOKRecipes{
+	response, err := repository.GetRecipe(a.db, int(id))
+	if err != nil {
+		return http.StatusInternalServerError, res, err
+	}
+	// res = CreateResponseOKRecipes{
+	// 	Message: "Recipe successfully created!",
+	// 	Recipe: [
+	// 		{
+	// 			"id": id,
+	// 			"title": rawRecipe.Title,
+	// 			"making_time": rawRecipe.MakingTime,
+	// 			"serves": rawRecipe.Serves,
+	// 			"ingredients": rawRecipe.Ingridients,
+	// 			"cost": rawRecipe.Cost,
+	// 			"created_at": rawRecipe.CreatedAt,
+	// 			"updated_at": rawRecipe.UpdatedAt
+	// 		}],
+	// }
+
+	OKres := CreateResponseOKRecipes{
 		Message: "Recipe successfully created!",
-		Recipe: [
-			{
-				"id": id,
-				"title": rawRecipe.Title,
-				"making_time": rawRecipe.MakingTime,
-				"serves": rawRecipe.Serves,
-				"ingredients": rawRecipe.Ingridients,
-				"cost": rawRecipe.Cost,
-				"created_at": rawRecipe.CreatedAt,
-				"updated_at": rawRecipe.UpdateAt
-			}]
+		Recipe: response,
 	}
 	
-	return http.StatusOK, res, nil
+	return http.StatusOK, OKres, nil
 }
 
-func (a *Room) Update(_ http.ResponseWriter, r *http.Request) (int, interface{}, error) {
+func (a *Recipes) Update(_ http.ResponseWriter, r *http.Request) (int, interface{}, error) {
 	return http.StatusNotFound, nil, nil
 }
 
-func (a *Room) Destroy(_ http.ResponseWriter, r *http.Request) (int, interface{}, error) {
+func (a *Recipes) Destroy(_ http.ResponseWriter, r *http.Request) (int, interface{}, error) {
 	return http.StatusNotFound, nil, nil
 }
 
@@ -158,3 +169,4 @@ func IngridientsCheck(str string) bool {
 	}
 	return true
 }
+

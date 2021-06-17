@@ -2,20 +2,19 @@ package server
 
 import (
 	"fmt"
-	"io/ioutil"
+	// "io/ioutil"
 	
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/gorilla/handlers"
-	"github.com/justinas/alice"
+	// "github.com/justinas/alice"
 
 	"github.com/is0405/docker/controller"
 	"github.com/is0405/docker/db"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
-	"github.com/rs/cors"
 )
 
 type Server struct {
@@ -51,22 +50,9 @@ func (s *Server) Run(port int) {
 }
 
 func (s *Server) Route() *mux.Router {
-	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedHeaders: []string{"*"},
-		AllowedMethods: []string{
-			http.MethodHead,
-			http.MethodGet,
-			http.MethodPost,
-			http.MethodPut,
-			http.MethodPatch,
-			http.MethodDelete,
-		},
-	})
-
 
 	r := mux.NewRouter()
 	RecipesControlloer := controller.NewRecipes(s.db)
-	r.Methods(http.MethodPost).Path("/recipes").Handler(authChain.Then(AppHandler{RecipesControlloer.Create}))
+	r.Methods(http.MethodPost).Path("/recipes").Handler(AppHandler{RecipesControlloer.Create})
 	return r
 }
