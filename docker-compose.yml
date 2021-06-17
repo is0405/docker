@@ -7,8 +7,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
     image: mysql:8.0
-    ports:
-      - 3306:3306
     volumes:
       - data-volume:/var/lib/mysql
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
@@ -19,7 +17,7 @@ services:
       - db
     container_name: recipes-migration
     volumes:
-      - ./database/migration/schema:/flyway/sql
+      - ./database/schema:/flyway/sql
 
   api:
     build:
