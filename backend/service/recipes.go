@@ -45,3 +45,59 @@ func (a *Recipes) Create(rawRecipe *model.Recipes) (int64, error) {
 	}
 	return createdId, nil
 }
+
+func (a *Recipes) Delete(delete_id int) (int64, error) {
+	var createdId int64
+	if err := dbutil.TXHandler(a.db, func(tx *sqlx.Tx) error {
+		
+		recipes, err := repository.RemoveRecipe(a.db, delete_id)
+		if err != nil {
+			return err
+		}
+		
+		if err := tx.Commit(); err != nil {
+			return err
+		}
+		
+		id, err := recipes.LastInsertId()
+		
+		if err != nil {
+			return err
+		}
+		
+		createdId = id
+		return err
+		
+	}); err != nil {
+		return 0, errors.Wrap(err, "failed recipe insert transaction")
+	}
+	return createdId, nil
+}
+
+func (a *Recipes) Update(data *model.Recipes) (int64, error) {
+	var createdId int64
+	if err := dbutil.TXHandler(a.db, func(tx *sqlx.Tx) error {
+		
+		recipes, err := repository.UpdateRecipe(a.db, data)
+		if err != nil {
+			return err
+		}
+		
+		if err := tx.Commit(); err != nil {
+			return err
+		}
+		
+		id, err := recipes.LastInsertId()
+		
+		if err != nil {
+			return err
+		}
+		
+		createdId = id
+		return err
+		
+	}); err != nil {
+		return 0, errors.Wrap(err, "failed recipe insert transaction")
+	}
+	return createdId, nil
+}

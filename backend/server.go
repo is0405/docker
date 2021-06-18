@@ -54,5 +54,12 @@ func (s *Server) Route() *mux.Router {
 	r := mux.NewRouter()
 	RecipesControlloer := controller.NewRecipes(s.db)
 	r.Methods(http.MethodPost).Path("/recipes").Handler(AppHandler{RecipesControlloer.Create})
+	r.Methods(http.MethodGet).Path("/recipes").Handler(AppHandler{RecipesControlloer.GetAllRecipe})
+	r.Methods(http.MethodPatch).Path("/recipes").Handler(AppHandler{RecipesControlloer.UpdateRecipe})
+	r.Methods(http.MethodDelete).Path("/recipes").Handler(AppHandler{RecipesControlloer.DeleteRecipe})
+	r.Methods(http.MethodGet).Path("/recipes/{id}").Handler(AppHandler{RecipesControlloer.GetRecipe})
+	r.Methods(http.MethodPatch).Path("/recipes/{id}").Handler(AppHandler{RecipesControlloer.UpdateRecipe})
+	r.Methods(http.MethodDelete).Path("/recipes/{id}").Handler(AppHandler{RecipesControlloer.DeleteRecipe})
+	
 	return r
 }
