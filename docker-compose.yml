@@ -29,8 +29,6 @@ services:
     container_name: recipes-api
     ports:
       - 10001:10001
-    environment:
-      - AWS_PROFILE=recipes
     volumes:
       - ./backend:/app
       - ~/.aws:/root/.aws:ro
