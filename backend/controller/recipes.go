@@ -164,7 +164,7 @@ func (a *Recipes) GetAllRecipe(_ http.ResponseWriter, r *http.Request) (int, int
 			Message: "Recipe get failed!",
 		}
 		// return http.StatusInternalServerError, msg, nil
-		return http.StatusOK, res, nil
+		return http.StatusOK, msg, nil
 	}
 
 	var response GetAllRecipeResponse
