@@ -1,7 +1,7 @@
 package model
 
 type Recipes struct {
-	ID          int    `db:"id" json:"account_id"`
+	ID          int    `db:"id" json:"id"`
 	Title       string `db:"title" json:"title"`
 	MakingTime  string `db:"making_time" json:"making_time"`
 	Serves      string `db:"serves" json:"serves"`

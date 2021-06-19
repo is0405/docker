@@ -152,7 +152,7 @@ func (a *Recipes) GetRecipe(_ http.ResponseWriter, r *http.Request) (int, interf
 }
 
 type GetAllRecipeResponse struct {
-	Recipe   []*model.Recipes `json:"recipe"`
+	Recipe   []*model.Recipes `json:"recipes"`
 }
 
 func (a *Recipes) GetAllRecipe(_ http.ResponseWriter, r *http.Request) (int, interface{}, error) {
