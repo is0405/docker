@@ -47,59 +47,71 @@ func (a *Recipes) Create(_ http.ResponseWriter, r *http.Request) (int, interface
 	}
 	
 	if err := json.NewDecoder(r.Body).Decode(&rawRecipe); err != nil {
-		return http.StatusBadRequest, res, err
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	//Title
 	if rawRecipe.Title == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil 
+		return http.StatusOK, res, nil
 	}
 
 	if !StringCheck(rawRecipe.Title) {
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	//MakingTime
 	if rawRecipe.MakingTime == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	if !StringCheck(rawRecipe.MakingTime) || !MakingTimeCheck(rawRecipe.MakingTime)  {
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 	
 	//Serves
 	if rawRecipe.Serves == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	if !StringCheck(rawRecipe.Serves) || !ServesCheck(rawRecipe.Serves){
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 	
 	//Ingridients
 	if rawRecipe.Ingridients == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 	
 	if !IngridientsCheck(rawRecipe.Ingridients) {
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	//Cost
 	if rawRecipe.Cost <= 0 {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	Service := service.NewRecipes(a.db)
 	id, err := Service.Create(rawRecipe)
 	if err != nil {
-		return http.StatusInternalServerError, res, nil
+		// return http.StatusInternalServerError, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	response, err := repository.GetRecipe(a.db, int(id))
 	if err != nil {
-		return http.StatusInternalServerError, res, nil
+		// return http.StatusInternalServerError, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	OKres := ResponseOKRecipes{}
@@ -125,7 +137,8 @@ func (a *Recipes) GetRecipe(_ http.ResponseWriter, r *http.Request) (int, interf
 			Message: "ID does not exist",
 		}
 		
-		return http.StatusInternalServerError, res, nil
+		// return http.StatusInternalServerError, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	OKres := ResponseOKRecipes{}
@@ -150,7 +163,8 @@ func (a *Recipes) GetAllRecipe(_ http.ResponseWriter, r *http.Request) (int, int
 		msg := ResponseMessageRecipes{
 			Message: "Recipe get failed!",
 		}
-		return http.StatusInternalServerError, msg, nil
+		// return http.StatusInternalServerError, msg, nil
+		return http.StatusOK, res, nil
 	}
 
 	var response GetAllRecipeResponse
@@ -171,61 +185,73 @@ func (a *Recipes) UpdateRecipe(_ http.ResponseWriter, r *http.Request) (int, int
 	}
 	
 	if err := json.NewDecoder(r.Body).Decode(&rawRecipe); err != nil {
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	rawRecipe.ID = id
 
 	//Title
 	if rawRecipe.Title == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	if !StringCheck(rawRecipe.Title) {
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	//MakingTime
 	if rawRecipe.MakingTime == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	if !StringCheck(rawRecipe.MakingTime) || !MakingTimeCheck(rawRecipe.MakingTime)  {
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 	
 	//Serves
 	if rawRecipe.Serves == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	if !StringCheck(rawRecipe.Serves) || !ServesCheck(rawRecipe.Serves){
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 	
 	//Ingridients
 	if rawRecipe.Ingridients == "" {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 	
 	if !IngridientsCheck(rawRecipe.Ingridients) {
-		return http.StatusBadRequest, res, nil
+		// return http.StatusBadRequest, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	//Cost
 	if rawRecipe.Cost <= 0 {
-		return http.StatusUnprocessableEntity, res, nil
+		// return http.StatusUnprocessableEntity, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	Service := service.NewRecipes(a.db)
 	_, err = Service.Update(rawRecipe)
 	if err != nil {
-		return http.StatusInternalServerError, res, nil
+		// return http.StatusInternalServerError, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	response, err := repository.GetRecipe(a.db, id)
 	if err != nil {
-		return http.StatusInternalServerError, res, nil
+		// return http.StatusInternalServerError, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	OKres := ResponseOKRecipes{}
@@ -249,7 +275,8 @@ func (a *Recipes) DeleteRecipe(_ http.ResponseWriter, r *http.Request) (int, int
 	_, err = repository.GetRecipe(a.db, id)
 	if err != nil {
 		res.Message = "No Recipe found"
-		return http.StatusInternalServerError, res, nil
+		// return http.StatusInternalServerError, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	Service := service.NewRecipes(a.db)
@@ -257,7 +284,8 @@ func (a *Recipes) DeleteRecipe(_ http.ResponseWriter, r *http.Request) (int, int
 	
 	if err != nil {
 		res.Message = "No Recipe found"
-		return http.StatusInternalServerError, res, nil
+		// return http.StatusInternalServerError, res, nil
+		return http.StatusOK, res, nil
 	}
 
 	res.Message = "Recipe successfully removed!"
